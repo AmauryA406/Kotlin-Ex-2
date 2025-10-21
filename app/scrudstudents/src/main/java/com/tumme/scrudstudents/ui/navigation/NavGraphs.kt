@@ -11,17 +11,24 @@ import com.tumme.scrudstudents.ui.student.StudentDetailScreen
 import com.tumme.scrudstudents.ui.course.CourseListScreen
 import com.tumme.scrudstudents.ui.course.CourseFormScreen
 import com.tumme.scrudstudents.ui.course.CourseDetailScreen
+import com.tumme.scrudstudents.ui.subscribe.SubscribeListScreen
+import com.tumme.scrudstudents.ui.subscribe.SubscribeFormScreen
 
 // Objet contenant les constantes des routes de navigation.
 object Routes {
+    // Routes Students (Partie 1)
     const val STUDENT_LIST = "student_list"
     const val STUDENT_FORM = "student_form"
     const val STUDENT_DETAIL = "student_detail/{studentId}"
 
-    // Routes pour les cours (ajoutées pour la Partie 2).
+    // Routes Courses (Partie 2)
     const val COURSE_LIST = "course_list"
     const val COURSE_FORM = "course_form"
     const val COURSE_DETAIL = "course_detail/{courseId}"
+
+    // Routes Subscribes (Partie 3)
+    const val SUBSCRIBE_LIST = "subscribe_list"
+    const val SUBSCRIBE_FORM = "subscribe_form"
 }
 
 // Composable définissant le graphe de navigation de l'application.
@@ -29,10 +36,10 @@ object Routes {
 fun AppNavHost() {
     val navController = rememberNavController()
 
-    // Démarre sur la liste des cours (changez pour STUDENT_LIST si vous préférez).
-    NavHost(navController, startDestination = Routes.COURSE_LIST) {
+    // Démarre sur la liste des inscriptions (Partie 3) - Changez selon vos besoins.
+    NavHost(navController, startDestination = Routes.SUBSCRIBE_LIST) {
 
-        // ========== STUDENTS ==========
+        // ========== STUDENTS (Partie 1) ==========
 
         composable(Routes.STUDENT_LIST) {
             StudentListScreen(
@@ -55,29 +62,38 @@ fun AppNavHost() {
 
         // ========== COURSES (Partie 2) ==========
 
-        // Destination pour la liste des cours.
         composable(Routes.COURSE_LIST) {
             CourseListScreen(
-                onNavigateToForm = { navController.navigate(Routes.COURSE_FORM) }, // Navigue vers le formulaire.
-                onNavigateToDetail = { id -> navController.navigate("course_detail/$id") } // Navigue vers les détails.
+                onNavigateToForm = { navController.navigate(Routes.COURSE_FORM) },
+                onNavigateToDetail = { id -> navController.navigate("course_detail/$id") }
             )
         }
 
-        // Destination pour le formulaire d'ajout de cours.
         composable(Routes.COURSE_FORM) {
-            CourseFormScreen(onSaved = { navController.popBackStack() }) // Retourne à l'écran précédent après sauvegarde.
+            CourseFormScreen(onSaved = { navController.popBackStack() })
         }
 
-        // Destination pour les détails d'un cours avec argument courseId de type Int.
         composable(
             "course_detail/{courseId}",
             arguments = listOf(navArgument("courseId"){ type = NavType.IntType })
         ) { backStackEntry ->
-            val id = backStackEntry.arguments?.getInt("courseId") ?: 0 // Récupère l'ID depuis les arguments.
+            val id = backStackEntry.arguments?.getInt("courseId") ?: 0
             CourseDetailScreen(
                 courseId = id,
-                onBack = { navController.popBackStack() } // Retourne à l'écran précédent.
+                onBack = { navController.popBackStack() }
             )
+        }
+
+        // ========== SUBSCRIBES (Partie 3) ==========
+
+        composable(Routes.SUBSCRIBE_LIST) {
+            SubscribeListScreen(
+                onNavigateToForm = { navController.navigate(Routes.SUBSCRIBE_FORM) }
+            )
+        }
+
+        composable(Routes.SUBSCRIBE_FORM) {
+            SubscribeFormScreen(onSaved = { navController.popBackStack() })
         }
     }
 }

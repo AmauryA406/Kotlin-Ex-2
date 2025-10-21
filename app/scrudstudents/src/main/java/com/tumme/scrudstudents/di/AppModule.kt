@@ -5,7 +5,6 @@ import androidx.room.Room
 import com.tumme.scrudstudents.data.local.AppDatabase
 import com.tumme.scrudstudents.data.local.dao.CourseDao
 import com.tumme.scrudstudents.data.local.dao.StudentDao
-import com.tumme.scrudstudents.data.local.dao.SubscribeDao
 import com.tumme.scrudstudents.data.repository.SCRUDRepository
 import dagger.Module
 import dagger.Provides
