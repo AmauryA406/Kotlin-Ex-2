@@ -7,6 +7,7 @@ import com.tumme.scrudstudents.data.local.model.StudentEntity
 import com.tumme.scrudstudents.data.local.model.SubscribeEntity
 import com.tumme.scrudstudents.data.local.model.SubscribeWithDetails // 👈 AJOUTEZ CETTE LIGNE
 import kotlinx.coroutines.flow.Flow
+import com.tumme.scrudstudents.data.local.dao.SubscribeDao
 
 // Repository centralisant l'accès aux données pour les entités Student, Course et Subscribe.
 class SCRUDRepository(
