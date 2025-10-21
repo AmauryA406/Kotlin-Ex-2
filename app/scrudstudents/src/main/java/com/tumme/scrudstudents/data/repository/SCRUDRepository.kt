@@ -6,6 +6,7 @@ import com.tumme.scrudstudents.data.local.dao.SubscribeDao
 import com.tumme.scrudstudents.data.local.model.CourseEntity
 import com.tumme.scrudstudents.data.local.model.StudentEntity
 import com.tumme.scrudstudents.data.local.model.SubscribeEntity
+import com.tumme.scrudstudents.data.local.model.SubscribeWithDetails // 👈 AJOUTEZ CETTE LIGNE
 import kotlinx.coroutines.flow.Flow
 
 // Repository centralisant l'accès aux données pour les entités Student, Course et Subscribe.
@@ -46,6 +47,9 @@ class SCRUDRepository(
 
     // Retourne un Flow de toutes les inscriptions.
     fun getAllSubscribes(): Flow<List<SubscribeEntity>> = subscribeDao.getAllSubscribes()
+
+    // Retourne un Flow de toutes les inscriptions avec détails (noms) - Challenge du PDF.
+    fun getAllSubscribesWithDetails(): Flow<List<SubscribeWithDetails>> = subscribeDao.getAllSubscribesWithDetails()
 
     // Retourne un Flow des inscriptions d'un étudiant spécifique.
     fun getSubscribesByStudent(sId: Int): Flow<List<SubscribeEntity>> = subscribeDao.getSubscribesByStudent(sId)

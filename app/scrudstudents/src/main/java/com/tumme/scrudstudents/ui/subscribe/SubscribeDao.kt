@@ -2,7 +2,6 @@ package com.tumme.scrudstudents.data.local.dao
 
 import androidx.room.*
 import com.tumme.scrudstudents.data.local.model.SubscribeEntity
-import com.tumme.scrudstudents.data.local.model.SubscribeWithDetails
 import kotlinx.coroutines.flow.Flow
 
 // DAO (Data Access Object) définissant les opérations de base de données pour les inscriptions.
@@ -20,21 +19,6 @@ interface SubscribeDao {
     // Récupère les inscriptions pour un cours spécifique.
     @Query("SELECT * FROM subscribes WHERE courseId = :courseId")
     fun getSubscribesByCourse(courseId: Int): Flow<List<SubscribeEntity>>
-
-    // Récupère toutes les inscriptions avec les détails des étudiants et cours (JOIN SQL) - Challenge du PDF.
-    @Query("""
-        SELECT 
-            subscribes.studentId,
-            subscribes.courseId,
-            subscribes.score,
-            (students.firstName || ' ' || students.lastName) as studentName,
-            courses.nameCourse as courseName
-        FROM subscribes
-        INNER JOIN students ON subscribes.studentId = students.idStudent
-        INNER JOIN courses ON subscribes.courseId = courses.idCourse
-        ORDER BY studentName, courseName
-    """)
-    fun getAllSubscribesWithDetails(): Flow<List<SubscribeWithDetails>>
 
     // Insère ou remplace une inscription de manière asynchrone (fonction suspend).
     @Insert(onConflict = OnConflictStrategy.REPLACE)
