@@ -4,7 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.navigation.compose.*
 import androidx.navigation.navArgument
-
+import com.tumme.scrudstudents.data.local.model.UserRole
+import com.tumme.scrudstudents.ui.auth.LoginScreen
+import com.tumme.scrudstudents.ui.auth.RegisterScreen
 import com.tumme.scrudstudents.ui.student.StudentListScreen
 import com.tumme.scrudstudents.ui.student.StudentFormScreen
 import com.tumme.scrudstudents.ui.student.StudentDetailScreen
@@ -14,32 +16,63 @@ import com.tumme.scrudstudents.ui.course.CourseDetailScreen
 import com.tumme.scrudstudents.ui.subscribe.SubscribeListScreen
 import com.tumme.scrudstudents.ui.subscribe.SubscribeFormScreen
 
-// Objet contenant les constantes des routes de navigation.
 object Routes {
-    // Routes Students (Partie 1)
+    const val LOGIN = "login"
+    const val REGISTER = "register"
+
     const val STUDENT_LIST = "student_list"
     const val STUDENT_FORM = "student_form"
     const val STUDENT_DETAIL = "student_detail/{studentId}"
 
-    // Routes Courses (Partie 2)
     const val COURSE_LIST = "course_list"
     const val COURSE_FORM = "course_form"
     const val COURSE_DETAIL = "course_detail/{courseId}"
 
-    // Routes Subscribes (Partie 3)
     const val SUBSCRIBE_LIST = "subscribe_list"
     const val SUBSCRIBE_FORM = "subscribe_form"
 }
 
-// Composable définissant le graphe de navigation de l'application.
 @Composable
 fun AppNavHost() {
     val navController = rememberNavController()
 
-    // Démarre sur la liste des inscriptions (Partie 3) - Changez selon vos besoins.
-    NavHost(navController, startDestination = Routes.SUBSCRIBE_LIST) {
+    NavHost(navController, startDestination = Routes.LOGIN) {
 
-        // ========== STUDENTS (Partie 1) ==========
+        composable(Routes.LOGIN) {
+            LoginScreen(
+                onLoginSuccess = { role, userId ->
+                    when (role) {
+                        UserRole.STUDENT -> navController.navigate(Routes.SUBSCRIBE_LIST) {
+                            popUpTo(Routes.LOGIN) { inclusive = true }
+                        }
+                        UserRole.TEACHER -> navController.navigate(Routes.COURSE_LIST) {
+                            popUpTo(Routes.LOGIN) { inclusive = true }
+                        }
+                    }
+                },
+                onNavigateToRegister = {
+                    navController.navigate(Routes.REGISTER)
+                }
+            )
+        }
+
+        composable(Routes.REGISTER) {
+            RegisterScreen(
+                onRegisterSuccess = { role, userId ->
+                    when (role) {
+                        UserRole.STUDENT -> navController.navigate(Routes.SUBSCRIBE_LIST) {
+                            popUpTo(Routes.LOGIN) { inclusive = true }
+                        }
+                        UserRole.TEACHER -> navController.navigate(Routes.COURSE_LIST) {
+                            popUpTo(Routes.LOGIN) { inclusive = true }
+                        }
+                    }
+                },
+                onBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
 
         composable(Routes.STUDENT_LIST) {
             StudentListScreen(
@@ -60,8 +93,6 @@ fun AppNavHost() {
             StudentDetailScreen(studentId = id, onBack = { navController.popBackStack() })
         }
 
-        // ========== COURSES (Partie 2) ==========
-
         composable(Routes.COURSE_LIST) {
             CourseListScreen(
                 onNavigateToForm = { navController.navigate(Routes.COURSE_FORM) },
@@ -78,13 +109,8 @@ fun AppNavHost() {
             arguments = listOf(navArgument("courseId"){ type = NavType.IntType })
         ) { backStackEntry ->
             val id = backStackEntry.arguments?.getInt("courseId") ?: 0
-            CourseDetailScreen(
-                courseId = id,
-                onBack = { navController.popBackStack() }
-            )
+            CourseDetailScreen(courseId = id, onBack = { navController.popBackStack() })
         }
-
-        // ========== SUBSCRIBES (Partie 3) ==========
 
         composable(Routes.SUBSCRIBE_LIST) {
             SubscribeListScreen(
