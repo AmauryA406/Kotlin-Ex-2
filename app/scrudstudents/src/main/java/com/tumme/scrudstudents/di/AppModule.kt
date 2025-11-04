@@ -12,6 +12,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 import dagger.hilt.android.qualifiers.ApplicationContext
+import com.tumme.scrudstudents.data.local.dao.SubscribeDao
 
 // Module Hilt définissant les dépendances injectables au niveau application (Singleton).
 @Module
