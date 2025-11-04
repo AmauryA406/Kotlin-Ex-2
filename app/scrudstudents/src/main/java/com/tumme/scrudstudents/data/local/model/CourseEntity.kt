@@ -21,6 +21,6 @@ data class CourseEntity(
     @PrimaryKey(autoGenerate = true) val idCourse: Int = 0,
     val nameCourse: String,
     val ectsCourse: Float,
-    val levelCourse: Level = Level.B1,
+    val levelCourse: LevelCourse,
     val teacherId: Int? = null
 )
