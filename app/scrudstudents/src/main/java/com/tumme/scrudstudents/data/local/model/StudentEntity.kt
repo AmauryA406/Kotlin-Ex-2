@@ -4,12 +4,14 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.Date
 
-// Entité Room représentant un étudiant dans la table "students" de la base de données.
 @Entity(tableName = "students")
 data class StudentEntity(
-    @PrimaryKey val idStudent: Int, // Clé primaire unique identifiant l'étudiant.
-    val lastName: String, // Nom de famille de l'étudiant.
-    val firstName: String, // Prénom de l'étudiant.
-    val dateOfBirth: Date, // Date de naissance (nécessite un TypeConverter pour Room).
-    val gender: Gender // Genre de l'étudiant (enum).
+    @PrimaryKey(autoGenerate = true) val idStudent: Int = 0,
+    val email: String = "",
+    val password: String = "",
+    val lastName: String,
+    val firstName: String,
+    val dateOfBirth: Date,
+    val gender: Gender,
+    val level: Level = Level.B1
 )
